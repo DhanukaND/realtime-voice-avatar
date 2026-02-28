@@ -6,6 +6,7 @@ const path = require("path");
 require("dotenv").config();
 
 const app = express();
+app.set("trust proxy", true);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -111,7 +112,7 @@ app.post("/api/ai", async (req, res) => {
         res.json({
             status: "ok",
             reply: aiReply,
-            audio: `https://${req.get("host")}/audio/voice.mp3`
+            audio: `${req.protocol}://${req.get("host")}/audio/voice.mp3`
         });
 
         // delete after 30 seconds
