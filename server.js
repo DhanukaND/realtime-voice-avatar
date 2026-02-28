@@ -72,7 +72,11 @@ app.post("/api/ai", async (req, res) => {
 
     } catch (err) {
         console.timeEnd("Groq response time");
-        console.log("Groq error:", err.message);
+        //console.log("Groq error:", err.message);
+        if(err.response)
+            console.log("Full error:", err.response.data);
+        else
+            console.log("Error:", err.message);
         console.timeEnd("TOTAL API TIME");
         return res.status(500).json({ error: "AI failed" });
     }
@@ -115,7 +119,7 @@ app.post("/api/ai", async (req, res) => {
 
 
 // ================= START SERVER =================
-const PORT = 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, async () => {
     console.log("Server running on port", PORT);
