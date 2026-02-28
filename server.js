@@ -112,7 +112,7 @@ app.post("/api/ai", async (req, res) => {
         res.json({
             status: "ok",
             reply: aiReply,
-            audio: `${req.protocol}://${req.get("host")}/audio/voice.mp3`
+            audio: `${req.protocol}://${req.get("host")}/audio/${fileName}`
         });
 
         // delete after 30 seconds
