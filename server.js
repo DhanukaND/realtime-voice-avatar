@@ -114,14 +114,6 @@ app.post("/api/ai", async (req, res) => {
             reply: aiReply,
             audio: `${req.protocol}://${req.get("host")}/audio/${fileName}`
         });
-
-        // delete after 30 seconds
-        setTimeout(() => {
-            fs.unlink(filePath, (err) => {
-                if (err) console.log("Delete error:", err);
-                else console.log("Audio file removed:", fileName);
-            });
-        }, 30000);
     });
 
 });
