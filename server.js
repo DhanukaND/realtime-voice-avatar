@@ -84,7 +84,7 @@ app.post("/api/ai", async (req, res) => {
     // ================= TTS =================
     console.time("TTS generation time");
 
-    const fileName = "voice.mp3";
+    const fileName = `voice_${Date.now()}.mp3`;
     const filePath = path.join(__dirname, fileName);
 
     const cleanText = aiReply
@@ -92,7 +92,7 @@ app.post("/api/ai", async (req, res) => {
         .replace(/\n/g, " ");
 
     const ttsCommand =
-        `python -m edge_tts --voice en-US-JennyNeural --text "${cleanText}" --write-media "${filePath}"`;
+        `python3 -m edge_tts --voice en-US-JennyNeural --text "${cleanText}" --write-media "${filePath}"`;
 
     exec(ttsCommand, (err) => {
 
@@ -113,6 +113,14 @@ app.post("/api/ai", async (req, res) => {
             reply: aiReply,
             audio: `${req.protocol}://${req.get("host")}/audio/voice.mp3`
         });
+
+        // delete after 30 seconds
+        setTimeout(() => {
+            fs.unlink(filePath, (err) => {
+                if (err) console.log("Delete error:", err);
+                else console.log("Audio file removed:", fileName);
+            });
+        }, 30000);
     });
 
 });
